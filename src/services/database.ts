@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 // Helper to get auth headers
 const getAuthHeaders = () => {
-  const sessionId = sessionStorage.getItem('qr_vault_session');
+  const sessionId = localStorage.getItem('qr_vault_session');
   return sessionId ? { Authorization: `Bearer ${sessionId}` } : {};
 };
 
