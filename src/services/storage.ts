@@ -56,11 +56,11 @@ export const findUserByUsername = async (username: string): Promise<User | undef
 export const findUserById = async (id: string): Promise<User | undefined> => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/users/${id}/public`);
-    
+
     if (!response.ok) {
       return undefined;
     }
-    
+
     const data = await response.json();
     return data.user;
   } catch (error) {
@@ -76,17 +76,21 @@ export const addUser = async (user: User): Promise<void> => {
 // QR Items operations - now using backend API
 export const getQRItems = async (): Promise<QRItem[]> => {
   try {
+    console.log('[API] Fetching QR items from:', `${API_BASE_URL}/api/qr-items`);
     const response = await fetch(`${API_BASE_URL}/api/qr-items`, {
       headers: {
         ...getAuthHeaders(),
       },
     });
-    
+
+    console.log('[API] Response status:', response.status);
+
     if (!response.ok) {
       throw new Error('Failed to fetch QR items');
     }
-    
+
     const data = await response.json();
+    console.log('[API] QR items data:', data);
     return data.items || [];
   } catch (error) {
     console.error('Error fetching QR items:', error);
@@ -105,13 +109,17 @@ export const getQRItemsByUser = async (userId: string): Promise<QRItem[]> => {
 
 export const getPublicQRItems = async (): Promise<QRItem[]> => {
   try {
+    console.log('[API] Fetching public QR items from:', `${API_BASE_URL}/api/qr-items/public`);
     const response = await fetch(`${API_BASE_URL}/api/qr-items/public`);
-    
+
+    console.log('[API] Public items response status:', response.status);
+
     if (!response.ok) {
       throw new Error('Failed to fetch public QR items');
     }
-    
+
     const data = await response.json();
+    console.log('[API] Public items data:', data);
     return data.items || [];
   } catch (error) {
     console.error('Error fetching public QR items:', error);
@@ -132,11 +140,11 @@ export const updateQRItem = async (
     formData.append('title', updatedItem.title);
     formData.append('description', updatedItem.description);
     formData.append('isPublic', String(updatedItem.isPublic));
-    
+
     if (imageFile) {
       formData.append('image', imageFile);
     }
-    
+
     const response = await fetch(`${API_BASE_URL}/api/qr-items/${updatedItem.id}`, {
       method: 'PUT',
       headers: {
@@ -144,11 +152,11 @@ export const updateQRItem = async (
       },
       body: formData,
     });
-    
+
     if (!response.ok) {
       throw new Error('Failed to update QR item');
     }
-    
+
     const data = await response.json();
     return data.item;
   } catch (error) {
@@ -165,7 +173,7 @@ export const deleteQRItem = async (id: string): Promise<void> => {
         ...getAuthHeaders(),
       },
     });
-    
+
     if (!response.ok) {
       throw new Error('Failed to delete QR item');
     }
@@ -192,11 +200,11 @@ export const createQRItem = async (
     formData.append('title', title);
     formData.append('description', description);
     formData.append('isPublic', String(isPublic));
-    
+
     if (imageFile) {
       formData.append('image', imageFile);
     }
-    
+
     const response = await fetch(`${API_BASE_URL}/api/qr-items`, {
       method: 'POST',
       headers: {
@@ -204,11 +212,11 @@ export const createQRItem = async (
       },
       body: formData,
     });
-    
+
     if (!response.ok) {
       throw new Error('Failed to create QR item');
     }
-    
+
     const data = await response.json();
     return data.item;
   } catch (error) {

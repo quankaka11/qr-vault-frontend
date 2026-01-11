@@ -31,11 +31,12 @@ export const QRCard: React.FC<QRCardProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Use imageUrl if available, otherwise construct from imageId
-    const imageUrl = item.imageUrl || (item.imageId ? `http://localhost:3000/uploads/${item.imageId}` : null);
+    // Use imageUrl from backend (Cloudinary URL)
+    // If imageUrl is not available, the image won't display
+    const imageUrl = item.imageUrl || null;
     setImageData(imageUrl);
     setIsLoading(false);
-  }, [item.imageId, item.imageUrl]);
+  }, [item.imageUrl]);
 
   const handleDownload = () => {
     if (!imageData) return;
@@ -46,7 +47,7 @@ export const QRCard: React.FC<QRCardProps> = ({
   };
 
   return (
-    <Card 
+    <Card
       ref={cardRef}
       className="qr-grid-item group animate-fade-in cursor-pointer hover:shadow-md transition-shadow duration-200"
       onClick={() => onPreview?.(item)}
@@ -75,7 +76,7 @@ export const QRCard: React.FC<QRCardProps> = ({
             Image not found
           </div>
         )}
-        
+
         {/* Overlay actions */}
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <div className="absolute bottom-3 left-3 right-3 flex justify-center gap-2">
@@ -118,7 +119,7 @@ export const QRCard: React.FC<QRCardProps> = ({
           </div>
         </div>
       </div>
-      
+
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">

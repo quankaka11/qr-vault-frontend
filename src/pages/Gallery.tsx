@@ -21,10 +21,10 @@ const Gallery: React.FC = () => {
     // Load usernames for all public items
     const loadUsernames = async () => {
       const names: Record<string, string> = {};
-      
+
       // Create array of unique user IDs
       const uniqueUserIds = [...new Set(publicItems.map(item => item.userId))];
-      
+
       // Fetch all usernames in parallel
       await Promise.all(
         uniqueUserIds.map(async (userId) => {
@@ -32,7 +32,7 @@ const Gallery: React.FC = () => {
           names[userId] = user?.username || 'Unknown';
         })
       );
-      
+
       setUsernames(names);
     };
 
@@ -45,7 +45,8 @@ const Gallery: React.FC = () => {
     setSelectedItem(item);
     setIsLoadingPreview(true);
     try {
-      const imageData = await getImage(item.imageId);
+      // Use imageUrl directly from item (Cloudinary URL)
+      const imageData = item.imageUrl || null;
       setPreviewImageData(imageData);
     } catch (error) {
       console.error('Error loading preview image:', error);
@@ -68,7 +69,7 @@ const Gallery: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="container mx-auto px-4 py-8">
         {/* Header Section */}
         <div className="text-center mb-8">
@@ -109,8 +110,8 @@ const Gallery: React.FC = () => {
               {searchQuery ? 'No results found' : 'No public QR codes yet'}
             </h2>
             <p className="text-muted-foreground">
-              {searchQuery 
-                ? 'Try a different search term' 
+              {searchQuery
+                ? 'Try a different search term'
                 : 'Be the first to share a QR code with the community!'}
             </p>
           </div>

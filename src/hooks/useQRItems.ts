@@ -21,12 +21,16 @@ export const useQRItems = () => {
     setIsLoading(true);
     try {
       if (user) {
+        console.log('[useQRItems] Fetching items for user:', user.id);
         const userItems = await getQRItemsByUser(user.id);
+        console.log('[useQRItems] User items received:', userItems);
         setItems(userItems);
       } else {
+        console.log('[useQRItems] No user logged in');
         setItems([]);
       }
       const pubItems = await getPublicQRItems();
+      console.log('[useQRItems] Public items received:', pubItems);
       setPublicItems(pubItems);
     } catch (error) {
       console.error('Error refreshing items:', error);
@@ -75,7 +79,7 @@ export const useQRItems = () => {
       };
 
       await updateQRItem(updatedItem, newImage);
-      
+
       await refreshItems();
       return true;
     } catch (error) {
